@@ -20,29 +20,47 @@ public class DungeonGame {
         int goldRow = scanner.nextInt();
         int goldColumn = scanner.nextInt();
 
-        int steps = calculateMinimumSteps(rows, columns, adventureRow, adventureColumn, goldRow, goldColumn, monsterRow, monsterColumn);
+        String path = calculateMinimumSteps(rows, columns, adventureRow, adventureColumn, goldRow, goldColumn, monsterRow, monsterColumn);
 
-        if (steps == -1) {
+        if (path.equals("No possible solution")) {
             System.out.println("No possible solution");
         } else {
-            System.out.println("Minimum number of steps: " + steps);
+            System.out.println("Minimum number of steps: " + path.split(" -> ").length);
+            System.out.println("Path: " + path);
         }
     }
 
-    private static int calculateMinimumSteps(int rows, int columns, int adventureRow, int adventureColumn, int goldRow, int goldColumn, int monsterRow, int monsterColumn) {
-
-        
-
-        if (Math.abs(monsterRow - adventureRow) == 1 || Math.abs(monsterColumn - adventureColumn) == 1) {
-            return -1;
+    private static String calculateMinimumSteps(int rows, int columns, int adventureRow, int adventureColumn, int goldRow, int goldColumn, int monsterRow, int monsterColumn) {
+        if (isMonsterBlocking(adventureRow, adventureColumn, monsterRow, monsterColumn)) {
+            return "No possible solution";
         }
 
-        int rowDiff = Math.abs(adventureRow - goldRow);
-        int columnDiff = Math.abs(adventureColumn - goldColumn);
-        int steps = rowDiff + columnDiff;
 
+        if (Math.abs(monsterRow - adventureRow) == 1 || Math.abs(monsterColumn - adventureColumn) == 1) {
+            return "No possible solution";
+        }
 
-        return rowDiff + columnDiff;
+        StringBuilder pathBuilder = new StringBuilder();
+        pathBuilder.append("(").append(adventureRow).append(",").append(adventureColumn).append(")");
+
+        while (adventureRow != goldRow || adventureColumn != goldColumn) {
+
+            if (adventureRow < goldRow) {
+                adventureRow++;
+            } else if (adventureRow > goldRow) {
+                adventureRow--;
+            }
+
+            if (adventureColumn < goldColumn) {
+                adventureColumn++;
+            } else if (adventureColumn > goldColumn) {
+                adventureColumn--;
+            }
+
+            pathBuilder.append(" -> (").append(adventureRow).append(",").append(adventureColumn).append(")");
+        }
+
+        return pathBuilder.toString();
     }
 
     private static boolean isMonsterBlocking(int adventureRow, int adventureColumn, int monsterRow, int monsterColumn) {
