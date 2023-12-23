@@ -31,9 +31,7 @@ public class DungeonGame {
 
     private static int calculateMinimumSteps(int rows, int columns, int adventureRow, int adventureColumn, int goldRow, int goldColumn, int monsterRow, int monsterColumn) {
 
-        if (isMonsterBlocking(adventureRow, adventureColumn, monsterRow, monsterColumn)) {
-            return -1;
-        }
+        
 
         if (Math.abs(monsterRow - adventureRow) == 1 || Math.abs(monsterColumn - adventureColumn) == 1) {
             return -1;
